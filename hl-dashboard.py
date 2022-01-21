@@ -7,13 +7,52 @@ import streamlit.components.v1 as components
 ######################################
 # PROJECT INFO
 
-PROJECT_NAME = 'PROJECT NAME'
+PROJECT_NAME = 'TEST NAME'
 PROJECT_ID = "23/00000"
-LOCATION = 'LOCATION'
-CLIENT = 'CLIENT'
-LAST_UPDATE = 'LAST_UPDATE'
+LOCATION = 'London, UK'
+CLIENT = 'Hoare Lea'
+LAST_UPDATE = '21/01/2022'
 REVISION = 1
-SPECKLE_STREAM = '21c4d435f0'
+
+project_details = {
+    'Project Name':PROJECT_NAME,
+    "Project ID" : PROJECT_ID,
+    "Location" : LOCATION,
+    "Client" : CLIENT,
+    "Last Update" : LAST_UPDATE,
+    "Revision" : REVISION, 
+}
+
+speckle_var = {
+    'Solar Irradiation':{
+        'Annual':'rad/annual',
+        'Summer':'rad/summer',
+        'Spring':'rad/spring',
+        'Winter':'rad/winter',
+        },
+    'Daylight':{
+        'VSC':  'daylight/vsc',
+        'DA':   'daylight/da',
+        'DF':   'daylight/df', 
+        'UDI':  'daylight/udi'
+                },
+    'Outdoor Comfort':{
+        'Annual':'utci/annual',
+        'Summer':'utci/summer',
+        'Spring':'utci/spring',
+        'Winter':'utci/winter',
+        },
+    'CFD':{
+        '0':'cfd/0',
+        '45':'cfd/45',
+        '90':'cfd/90',
+        '125':'cfd/125',
+        '180':'cfd/180',
+        '225':'cfd/225',
+        '275':'cfd/275',
+        '325':'cfd/325',
+    }
+}
 
 ######################################
 # DASHBOARD SETTINGS
@@ -27,7 +66,7 @@ st.set_page_config(layout="wide")
 st.sidebar.image("https://upload.wikimedia.org/wikipedia/en/thumb/4/48/Hoare_Lea_logo.svg/1200px-Hoare_Lea_logo.svg.png", width=200)
 
 # set 2 columns
-col1, col2 = st.columns(2)
+col1, col2 = st.columns([2,1])
 
 col1.markdown(""" 
 # Hoare Lea Test Report V0.1
@@ -36,50 +75,39 @@ col1.markdown("""
 This a test case for showcasing the the great potential of web reporting utilizing **Python**,
 **Speckle** and **Streamlit** for creating compeling web-based reports integrating 3D geometry as well as interactive plotting.
 """)
-'---'
+st.write('---')
 
-project_details = {
-    'Project Name':PROJECT_NAME,
-    "Project ID" : PROJECT_ID,
-    "Location" : LOCATION,
-    "Client" : CLIENT,
-    "Last Update" : LAST_UPDATE,
-    "Revision" : REVISION, 
-}
-
-
-speckle_var = {
-    'Solar Irradiation':{
-        'Annual':'rad/annual',
-        'Summer':'rad/summer',
-        'Spring':'rad/spring',
-        'Winter':'rad/winter',
-        },
-    'Daylight':{
-        'VSC':'daylight/vsc',
-        'DA':'daylight/da',
-        'DF':'daylight/df', 
-        'UDI':'daylight/udi'
-                }
-}
 
 # col2.header('Project details')
 
-col2.write(project_details)
+project_details_df = pd.DataFrame(list(project_details.items()), columns=['Property', 'Value'])
+
+# insert table second column
+col2.table(project_details_df.astype(str))
 
 ######################################
 
 # sidebar
+st.sidebar.header('Set Speckle Stream ID')
+SPECKLE_STREAM = st.sidebar.text_input('Speckle ID', '0b7b9e7705')
+
+
+# sidebar
 st.sidebar.header('Select Analysis Topic')
 
-sel_topic = st.sidebar.selectbox('Topic', ['Daylight', 'Solar Irradiation'])
+# select analysis type
+sel_topic = st.sidebar.radio('Topic', ['Daylight', 'Solar Irradiation', 'Outdoor Wind Comfort', 'Outdoor Thermal Comfort', 'Air Quality'])
 
 if sel_topic == 'Daylight':
     st.markdown("""
     ## Dayligthing
-    Further explain the topic""")
+    Daylight in buildings is composed of a mix – direct sunlight, diffuse skylight, and light reflected from the ground and surrounding elements. Daylighting design needs to consider orientation and building site characteristics, facade and roof characteristics, size and placement of window openings, glazing and shading systems, and geometry and reflectance of interior surfaces. Good daylighting design ensures adequate light during daytime.""")
 
     sel_analysis = st.selectbox('Select Metric', ['VSC','DA', 'DF', 'UDI'])
+    
+    iframe_url = f"https://speckle.xyz/embed?stream={SPECKLE_STREAM}&branch={speckle_var[sel_topic][sel_analysis]}"
+    iframe_url
+    
     if sel_analysis == 'VSC':
         st.write("""
         ### Vertical Sky Component (VSC)
@@ -99,8 +127,7 @@ if sel_topic == 'Daylight':
         - **Less than 5%**, then it is often impossible to achieve reasonable daylight, even if the whole window wall is glazed
         """)
 
-        components.iframe("https://speckle.xyz/embed?stream=0c710cc031&commit=42db1034e7",
-                height=iframe_h)
+        components.iframe(iframe_url, height=iframe_h)
         
     elif sel_analysis == 'DA':
         st.write("""
@@ -117,8 +144,7 @@ if sel_topic == 'Daylight':
         - Uniformity Dmin/Dav
         """)
 
-        components.iframe("https://speckle.xyz/embed?stream=0c710cc031&commit=42db1034e7",
-        height=iframe_h)
+        components.iframe(iframe_url, height=iframe_h)
         
     elif sel_analysis == 'DF':
         st.markdown("""
@@ -137,7 +163,7 @@ if sel_topic == 'Daylight':
         will most likely not be used during daytime (CIBSE, 2002).
         """)
         st.write('')
-        components.iframe("https://speckle.xyz/embed?stream=0c710cc031&commit=42db1034e7", height=iframe_h)
+        components.iframe(iframe_url, height=iframe_h)
         
     elif sel_analysis == 'UDI':
         st.markdown("""
@@ -151,7 +177,7 @@ if sel_topic == 'Daylight':
         Recent examples in school daylighting design in the UK have led to recommendations to achieve UDI in the range 100-3 000 lux for 80% of occupancy hours.
         """)
 
-        components.iframe("https://speckle.xyz/embed?stream=0c710cc031&commit=42db1034e7", height=iframe_h)
+        components.iframe(iframe_url, height=iframe_h)
         
 elif sel_topic == 'Solar Irradiation':
     st.write("""
@@ -165,10 +191,11 @@ elif sel_topic == 'Solar Irradiation':
     
     sel_analysis = st.selectbox('Select Time Period', ['Annual','Summer', 'Spring', 'Winter'])
     
+    # set dynamic iframe url    
     iframe_url = f"https://speckle.xyz/embed?stream={SPECKLE_STREAM}&branch={speckle_var[sel_topic][sel_analysis]}"
     iframe_url
-
     
+    # display each analysis
     if sel_analysis == 'Annual':
         st.write("""
         ## Annual Analysis
@@ -200,3 +227,17 @@ elif sel_topic == 'Solar Irradiation':
         """)
         
         components.iframe(iframe_url, height=iframe_h)
+        
+elif sel_topic == 'Outdoor Wind Comfort':
+    st.warning('WIP')
+    pass
+
+elif sel_topic == 'Air Quality':
+    st.warning('WIP')
+    pass
+
+elif sel_topic == 'Outdoor Comfort':
+    st.warning('WIP')
+    pass
+
+

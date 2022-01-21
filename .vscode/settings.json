@@ -1,0 +1,6 @@
+{
+    {
+        // Wraps after 72 characters
+        "rewrap.wrappingColumn": 160
+      }
+}
