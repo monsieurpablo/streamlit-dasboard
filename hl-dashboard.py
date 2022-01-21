@@ -12,7 +12,6 @@ PROJECT_ID = "23/00000"
 LOCATION = 'London, UK'
 CLIENT = 'Hoare Lea'
 LAST_UPDATE = '21/01/2022'
-REVISION = 1
 
 project_details = {
     'Project Name':PROJECT_NAME,
@@ -20,7 +19,6 @@ project_details = {
     "Location" : LOCATION,
     "Client" : CLIENT,
     "Last Update" : LAST_UPDATE,
-    "Revision" : REVISION, 
 }
 
 speckle_var = {
