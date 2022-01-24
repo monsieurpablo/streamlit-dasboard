@@ -226,7 +226,9 @@ elif sel_topic == 'Solar Irradiation':
         
         components.iframe(iframe_url, height=iframe_h)
         
-elif sel_topic == 'Outdoor Wind Comfort':
+elif sel_topic == 'Outdoor Thermal Comfort':
+    speckle_var[sel_topic]
+    sel_analysis = st.selectbox('Select Period', speckle_var[sel_topic].keys())
     st.warning('WIP')
     pass
 
