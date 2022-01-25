@@ -22,7 +22,7 @@ project_details = {
 }
 
 speckle_var = { #key (manual), value -> should come from available in speckle
-    'Solar Irradiation':{
+    'Solar Gain':{
         'Annual':'rad/annual',
         'Summer':'rad/summer',
         'Spring':'rad/spring',
@@ -67,7 +67,7 @@ iframe_h = 500
 st.set_page_config(layout="wide")
 
 ######################################
-# HEADER
+############ HEADER ##################
 
 # company logo on top
 st.sidebar.image("https://upload.wikimedia.org/wikipedia/en/thumb/4/48/Hoare_Lea_logo.svg/1200px-Hoare_Lea_logo.svg.png", width=200)
@@ -76,19 +76,18 @@ st.sidebar.image("https://upload.wikimedia.org/wikipedia/en/thumb/4/48/Hoare_Lea
 col1, col2 = st.columns([2,1])
 
 col1.markdown(""" 
-# Hoare Lea Test Report V0.1 
+# Hoare Lea Test Report V0.2
 ***Pablo Arango***
 
 Sample dashboard for showcasing the the great potential of web reporting
 utilizing **Python**, **Speckle** and **Streamlit** for creating compeling
-web-based reports integrating 3D geometry as well as Building Physics reusults
+web-based reports integrating 3D geometry as well as Building Physics results
 into a engaging interactive report.
 """)
 st.write('---')
 
 
-# col2.header('Project details')
-
+# Create Data frame with project properties
 project_details_df = pd.DataFrame(list(project_details.items()), columns=['Property', 'Value'])
 project_details_df.set_index('Property', inplace= True)
 
@@ -96,8 +95,8 @@ project_details_df.set_index('Property', inplace= True)
 col2.table(project_details_df.astype(str))
 
 ######################################
-
-# sidebar
+######################################
+# SIDEBAR
 st.sidebar.header('Set Speckle Stream ID')
 SPECKLE_STREAM = st.sidebar.text_input('Speckle ID', '0b7b9e7705')
 
@@ -106,17 +105,25 @@ SPECKLE_STREAM = st.sidebar.text_input('Speckle ID', '0b7b9e7705')
 st.sidebar.header('Select Analysis Topic')
 
 # select analysis type
-sel_topic = st.sidebar.radio('Topic', ['Solar Irradiation', 'Daylight' , 'Outdoor Wind Comfort', 'Outdoor Thermal Comfort', 'Air Quality'])
+sel_topic = st.sidebar.radio('Topic', ['Solar Gain', 'Daylight' , 'Outdoor Wind Comfort', 'Outdoor Thermal Comfort', 'Air Quality'])
 
+######################################
+######################################
+# MAIN CONTENT
         
-if sel_topic == 'Solar Irradiation':
+if sel_topic == 'Solar Gain':
     st.write("""
-    ## Solar Irradiation
-    Explain why solar irradiation is an important measure to follow
-    - Solar energy gain
-    - Overheating potential
-    - Passive solar heating in winter
-    - PV assessment
+    ## Solar Gain 
+    Solar gain is short wave radiation from the sun that heats a
+    building, either directly through an opening such as a window, or indirectly
+    through the fabric of the building. Solar design (or passive solar design)
+    is an aspect of passive building design that focusses on maximizing the use
+    of heat energy from solar radiation. 
+    
+    Very broadly, solar gain can be beneficial in cooler climates when it can be
+    used as a passive way of heating buildings. However, too much solar gain can
+    cause overheating and for this reason, Part L of the UK building regulations
+    places restrictions on the amount of glazing that can be used in buildings.
     """)
     
     sel_analysis = st.selectbox('Select Analysis', speckle_var[sel_topic].keys())
@@ -131,15 +138,23 @@ if sel_topic == 'Solar Irradiation':
     if sel_analysis == 'Annual':
         st.write("""
         ### Annual Analysis
-        Something here
+        1st January to 31th December 
         """)
         
         components.iframe(iframe_url, height=iframe_h)
+        
+        st.subheader('Remarks')
+        st.write("""
+                 Consultant manual typed comments
+                 - x
+                 - y 
+                 - z
+                 """)
 
     elif sel_analysis == 'Summer':
         st.write("""
         ### Summer Analysis
-        Typical summer day close to 21st of Jun
+        Typical summer summer day in Jun
         """)
 
         components.iframe(iframe_url, height=iframe_h)
@@ -147,7 +162,7 @@ if sel_topic == 'Solar Irradiation':
     elif sel_analysis == 'Spring':
         st.write("""
         ### Spring Analysis
-        Typical spring day close to 21st of March
+        Typical spring day in March
         """)
         
         components.iframe(iframe_url, height=iframe_h)
@@ -163,7 +178,7 @@ if sel_topic == 'Solar Irradiation':
 
 elif sel_topic == 'Daylight':
     st.markdown("""
-    ## Dayligthing 
+    ## Daylight
     Daylight in buildings is composed of a mix – direct sunlight,
     diffuse skylight, and light reflected from the ground and surrounding
     elements. Daylighting design needs to consider orientation and building site
@@ -291,12 +306,12 @@ elif sel_topic == 'Daylight':
      
 elif sel_topic == 'Outdoor Wind Comfort':
     st.write("""
-             ## Outdoor Wind Comfort 
-             Pedestrian wind comfort studies take into
-             consideration meteorological data, aerodynamics, and comfort
-             criteria. The data regarding the latter two is provided by wind
-             tunnel testing (physical experiments) and numerical simulation with
-             computational fluid dynamics (CFD) software.
+            ## Outdoor Wind Comfort 
+            Pedestrian wind comfort studies take into
+            consideration meteorological data, aerodynamics, and comfort
+            criteria. The data regarding the latter two is provided by wind
+            tunnel testing (physical experiments) and numerical simulation with
+            computational fluid dynamics (CFD) software.
 
             Simulation can digitally model the airflow over and around a
             building or urban area and is a faster and less costly approach than
