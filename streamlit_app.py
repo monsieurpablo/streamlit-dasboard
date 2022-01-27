@@ -380,8 +380,11 @@ elif sel_topic == 'Air Quality':
 
 hide_streamlit_style = """
             <style>
-            #MainMenu {visibility: show;}
+            #MainMenu {visibility: hidden;}
             footer {visibility: hidden;}
+            footer:after{
+                content:'Copyright @2022: Hoarelea'
+            }
             </style>
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
