@@ -385,3 +385,10 @@ hide_streamlit_style = """
             </style>
             """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
+
+# Hide hosted with Streamlit ->
+hide_footer_style = """
+<style>
+.reportview-container .main footer {visibility: hidden;}    
+"""
+st.markdown(hide_footer_style, unsafe_allow_html=True)
