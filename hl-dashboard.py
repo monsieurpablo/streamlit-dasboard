@@ -126,6 +126,7 @@ if sel_topic == 'Solar Gain':
     places restrictions on the amount of glazing that can be used in buildings.
     """)
     
+    st.header('Select Analysis')
     sel_analysis = st.selectbox('Select Analysis', speckle_var[sel_topic].keys())
     
     
@@ -186,7 +187,9 @@ elif sel_topic == 'Daylight':
     window openings, glazing and shading systems, and geometry and reflectance
     of interior surfaces. Good daylighting design ensures adequate light during
     daytime.""")
-
+    
+    
+    st.header('Select Analysis')
     sel_analysis = st.selectbox('Select Analysis', speckle_var[sel_topic].keys())
     
     iframe_url = f"https://speckle.xyz/embed?stream={SPECKLE_STREAM}&branch={speckle_var[sel_topic][sel_analysis]}"
@@ -327,6 +330,7 @@ elif sel_topic == 'Outdoor Wind Comfort':
             criteria. 
              """)
     
+    st.header('Select Analysis')
     sel_analysis = st.selectbox('Select Orientation', speckle_var[sel_topic].keys())
     '---'
 
@@ -346,7 +350,7 @@ elif sel_topic == 'Outdoor Thermal Comfort':
              - z
              """)
 
-
+    st.header('Select Period')
     sel_analysis = st.selectbox('Select Period', speckle_var[sel_topic].keys())
     
     iframe_url = f"https://speckle.xyz/embed?stream={SPECKLE_STREAM}&branch={speckle_var[sel_topic][sel_analysis]}"
@@ -371,6 +375,7 @@ elif sel_topic == 'Air Quality':
     
     st.warning('WIP')
     
+    st.header('Select Analysis')
     sel_analysis = st.selectbox('Select Analysis', speckle_var[sel_topic].keys())
     iframe_url = f"https://speckle.xyz/embed?stream={SPECKLE_STREAM}&branch={speckle_var[sel_topic][sel_analysis]}"
     
