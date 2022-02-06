@@ -4,7 +4,6 @@ import numpy as np
 
 import streamlit.components.v1 as components
 
-import areas, metrics
 ######################################
 # PROJECT INFO
 
@@ -126,9 +125,10 @@ if sel_topic == 'Solar Gain':
     cause overheating and for this reason, Part L of the UK building regulations
     places restrictions on the amount of glazing that can be used in buildings.
     """)
-    
-    sel_analysis = st.selectbox('Select Analysis', speckle_var[sel_topic].keys())
-    
+    '---'
+    st.subheader('Select Analysis')
+    sel_analysis = st.selectbox('Drop-down', speckle_var[sel_topic].keys())
+    '---'
     
         
     # set dynamic iframe url    
@@ -185,9 +185,9 @@ elif sel_topic == 'Daylight':
     elements. Daylighting design needs to consider orientation and building site
     characteristics, facade and roof characteristics, size and placement of
     window openings, glazing and shading systems, and geometry and reflectance
-    of interior surfaces. Good daylighting design ensures adequate light during
-    daytime.""")
+    of interior surfaces.""")
 
+    st.subheader('Select Analysis')
     sel_analysis = st.selectbox('Select Analysis', speckle_var[sel_topic].keys())
     
     iframe_url = f"https://speckle.xyz/embed?stream={SPECKLE_STREAM}&branch={speckle_var[sel_topic][sel_analysis]}"
@@ -196,8 +196,7 @@ elif sel_topic == 'Daylight':
     if sel_analysis == 'VSC':
         st.write("""
         ### Vertical Sky Component (VSC)
-        The Building Research Establishment
-        (BRE) have set out in their handbook ‘Site Layout Planning for Daylight
+        The Building Research Establishment (BRE) have set out in their handbook ‘Site Layout Planning for Daylight
         and Sunlight a Guide to Good Practice (2011)’, guidelines and
         methodology for the measurement and assessment of daylight and sunlight
         within proposed buildings. One of the methods mentioned within section
@@ -208,19 +207,19 @@ elif sel_topic == 'Daylight':
         on the outside face of the window. This unit is expressed as a
         percentage as it is the ratio between the amount of sky visible at the
         given reference point compared to the amount of light that would be
-        available from a totally unobstructed hemisphere of sky. To put this
+        available from a totally unobstructed hemisphere of sky. Therefore a
         unit of measurement into perspective, the maximum percentage value for a
         window with a completely unobstructed view through 90° in every
-        direction is close to 50%. In order to maintain good levels of daylight
+        direction has a VSC close to 40%. 
+        
+        ADD figure here. 
+        
+        In order to maintain good levels of daylight
         the BRE guidance recommend that the VSC of a window should be 27% or
         greater. However, the 2011 BRE Handbook makes allowance for different
         target values in cases where a higher degree of obstruction may be
         unavoidable such as historic city centres or modern high rise buildings.
         *Source: BRE 2011*
-
-        While most planning authorities now require these assessments, it is
-        noted in the BRE Guidelines that they should be treated as guidelines as
-        opposed to rules. 
 
         The guidelines state that if the VSC is:
 
@@ -234,7 +233,7 @@ elif sel_topic == 'Daylight':
         - **Less than 5%**, then it is often impossible to achieve reasonable
           daylight, even if the whole window wall is glazed
         """)
-        
+    
         ''
 
         components.iframe(iframe_url, height=iframe_h)
@@ -328,6 +327,7 @@ elif sel_topic == 'Outdoor Wind Comfort':
             criteria. 
              """)
     
+    st.subheader('Select Analysis')
     sel_analysis = st.selectbox('Select Orientation', speckle_var[sel_topic].keys())
     '---'
 
@@ -347,7 +347,7 @@ elif sel_topic == 'Outdoor Thermal Comfort':
              - z
              """)
 
-
+    st.subheader('Select Analysis')
     sel_analysis = st.selectbox('Select Period', speckle_var[sel_topic].keys())
     
     iframe_url = f"https://speckle.xyz/embed?stream={SPECKLE_STREAM}&branch={speckle_var[sel_topic][sel_analysis]}"
@@ -372,11 +372,14 @@ elif sel_topic == 'Air Quality':
     
     st.warning('WIP')
     
+    st.subheader('Select Analysis')
     sel_analysis = st.selectbox('Select Analysis', speckle_var[sel_topic].keys())
     iframe_url = f"https://speckle.xyz/embed?stream={SPECKLE_STREAM}&branch={speckle_var[sel_topic][sel_analysis]}"
     
     components.iframe(iframe_url, height=iframe_h)
     
+
+# hide 'Made with Streamlit' Footer
 
 hide_streamlit_style = """
             <style>
