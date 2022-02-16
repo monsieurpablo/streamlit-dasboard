@@ -99,6 +99,8 @@ class DashBoardApp(HydraHeadApp):
 
         # Sidebar - Revision Selection
         speckle_df = load_data(stream_id=STREAM_ID)
+        speckle_df = speckle_df[speckle_df.revision != 'globals'] # remove global
+
         # st.write(speckle_df)
 
         st.sidebar.subheader('Select Revision')
