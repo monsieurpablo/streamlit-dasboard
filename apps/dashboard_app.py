@@ -168,4 +168,11 @@ class DashBoardApp(HydraHeadApp):
 
         # with col4:
         urls = speckle_iframe(df_sel_metric, stream_id=STREAM_ID)
+        
+        #################################################################
+        # MANUAL REMARKS
+        # makes sense to send the remarks in an Excel file with the topic coordinates 
+        # then the issue is how to upload the results? 
+        
+        
 # %%

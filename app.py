@@ -22,7 +22,8 @@ if __name__ == '__main__':
                    navbar_sticky = True, 
                    navbar_animation= False,
                    layout='wide', # centered or wide
-                   navbar_theme = over_theme
+                   navbar_theme = over_theme,
+                   allow_url_nav = True
                    )
   
     #Home button will be in the middle of the nav list now

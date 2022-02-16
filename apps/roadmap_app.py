@@ -23,7 +23,7 @@ class RoadmapApp(HydraHeadApp):
         st.image("https://upload.wikimedia.org/wikipedia/en/thumb/4/48/Hoare_Lea_logo.svg/1200px-Hoare_Lea_logo.svg.png", width=200)
 
         # set 2 columns
-        space1, col,space2  = st.columns([1,1,1])
+        space1, col,space2  = st.columns([1,3,1])
         
         with col:
             roadmap_md = read_markdown('apps/data/roadmap.md')
