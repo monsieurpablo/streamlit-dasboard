@@ -1,7 +1,9 @@
 # %%
+from email import header
 import streamlit as st
 import pandas as pd
 import numpy as np
+import re
 
 import streamlit.components.v1 as components
 
@@ -9,6 +11,7 @@ import streamlit.components.v1 as components
 from hydralit import HydraHeadApp
 
 from apps.extras.speckle_data import *
+from apps.extras.md_to_df import md2df
 # from helpers.speckle_data import get_speckle_df
 
 # %%
@@ -39,6 +42,7 @@ class DashBoardApp(HydraHeadApp):
 
 # wrap all your code in this method and you should be done
     def run(self):
+
         ######################################
         # PROJECT INFO
 
@@ -47,13 +51,15 @@ class DashBoardApp(HydraHeadApp):
         LOCATION = 'London, UK'
         CLIENT = 'Hoare Lea'
         LAST_UPDATE = '21/01/2022'
+        CONSULTANT = 'Pablo Arango'
 
         project_details = {
-            'Project Name': PROJECT_NAME,
+            'Project': PROJECT_NAME,
             "Project ID": PROJECT_ID,
             "Location": LOCATION,
             "Client": CLIENT,
             "Last Update": LAST_UPDATE,
+            "Consultant": CONSULTANT
         }
 
         ############ HEADER ##################
@@ -65,24 +71,26 @@ class DashBoardApp(HydraHeadApp):
         # set 2 columns
         col1, col2 = st.columns([2, 1])
 
-        col1.markdown(""" 
-        # {{Project Name}}
-        ***{{Consultant Name}} | Hoare Lea LLP.***
+        col1.markdown(f""" 
+        # {PROJECT_NAME}
+        ***{CONSULTANT} | Hoare Lea LLP.***
 
-        Sample description of the project with replacemen variables such as {{location}} {{client}} {{date}} {{last_update}} and any other variable
+        Sample description of the project with replacemen variables such as **{LOCATION}** **{CLIENT}** **{LAST_UPDATE}** and any other variable
         
-        {{list of analyses present}}
-        {{# of revisions}}
+        list of analyses present number of revisions
         """)
         st.write('---')
 
         # Create Data frame with project properties
-        project_details_df = pd.DataFrame(
-            list(project_details.items()), columns=['Property', 'Value'])
+        project_details_df = pd.DataFrame(list(project_details.items()),
+                                          columns=['Property', 'Value'])
         project_details_df.set_index('Property', inplace=True)
 
+        # # Inject CSS with Markdown
+        # st.markdown(hide_table_row_index, unsafe_allow_html=True)
+
         # insert table second column
-        col2.table(project_details_df.astype(str))
+        col2.write(project_details_df)
 
         ######################################
         # SIDEBAR
@@ -91,6 +99,7 @@ class DashBoardApp(HydraHeadApp):
 
         # Sidebar - Revision Selection
         speckle_df = load_data(stream_id=STREAM_ID)
+        # st.write(speckle_df)
 
         st.sidebar.subheader('Select Revision')
         sorted_unique_revision = sorted(speckle_df.revision.unique())
@@ -98,7 +107,7 @@ class DashBoardApp(HydraHeadApp):
             'Revision', sorted_unique_revision, index=0)  # select first
 
         # Filtering data
-        # df_sel_rev = speckle_df[(speckle_df.revision.isin(sel_rev))]
+        # df_sel_rev = speckle_df[(speckle_df.revision.isin(sel_rev))] # use for list
         df_sel_rev = speckle_df[speckle_df.revision == sel_rev]
 
         # # Sidebar - Analysis selection
@@ -110,14 +119,29 @@ class DashBoardApp(HydraHeadApp):
         # ######################################
         # # MAIN CONTENT
 
-        st.title(sel_topic.upper())
+        # read markdown dataframe
+        df_md = pd.read_excel('apps/data/df_markdown.xlsx', dtype="string")
+
+        # st.title(sel_topic.upper())
+
+        # debug
+        # with st.expander('Dataframe'):
+        #     st.write(df_md)
+
+        df_md_sel_topic = df_md[df_md.speckleName == sel_topic]
+        st.header(df_md_sel_topic.header.iloc[0])
+        st.write(df_md_sel_topic.text.iloc[0])
+
+        with st.expander('Technichal details'):
+            st.write(df_md_sel_topic.detailedText.iloc[0])
+
         # Filtering data
         # df_sel_rev = speckle_df[(speckle_df.revision.isin(sel_rev))] #filter based on list
         df_sel_topic = df_sel_rev[df_sel_rev.topic == sel_topic]
 
-        # debug
-        with st.expander('Dataframe'):
-            st.write(df_sel_topic)
+        # # debug
+        # with st.expander('Dataframe'):
+        #     st.write(df_sel_topic)
 
         # Analysis selection
         sorted_unique_metrics = sorted(df_sel_topic.metric.unique())
@@ -125,29 +149,23 @@ class DashBoardApp(HydraHeadApp):
             'Metric', sorted_unique_metrics, index=0)  # select first
         st.write("---")
 
+        # set 2 columns
+        col3, col4 = st.columns([1, 1])
+
         df_sel_metric = df_sel_topic[df_sel_topic.metric == sel_metric]
 
-        st.subheader(sel_metric.upper())
+        # with col3:
+        if sel_metric in df_md.speckleName.values:
 
+            df_md_sel_metric = df_md[df_md.speckleName == sel_metric]
+
+            st.subheader(df_md_sel_metric.header.iloc[0])
+            st.write(df_md_sel_metric.text.iloc[0])
+            with st.expander('Technichal details'):
+                st.write(df_md_sel_metric.detailedText.iloc[0])
+        else:
+            st.subheader(f"Analysis for {sel_metric.upper()}")
+
+        # with col4:
         urls = speckle_iframe(df_sel_metric, stream_id=STREAM_ID)
-
-        # ############################################################
-        # Additional
-        hide_streamlit_style = """
-                    <style>
-                    #MainMenu {visibility: hidden;}
-                    footer {visibility: hidden;}
-                    footer:after{
-                        content:'Copyright @2022: Hoarelea'
-                    }
-                    </style>
-                    """
-        st.markdown(hide_streamlit_style, unsafe_allow_html=True)
-
-        # Hide hosted with Streamlit ->
-        hide_footer_style = """
-        <style>
-        .reportview-container .main footer {visibility: hidden;}    
-        """
-        st.markdown(hide_footer_style, unsafe_allow_html=True)
 # %%
