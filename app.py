@@ -1,39 +1,51 @@
 #when we import hydralit, we automatically get all of Streamlit
-from hydralit import HydraApp
-import hydralit_components as hc
 import streamlit as st
+import hydralit_components as hc
 import apps
 
-#Only need to set these here as we are add controls outside of Hydralit, to customise a run Hydralit!
-st.set_page_config(page_title='Hoarelea Web Toolkit', page_icon="🧰",layout='wide',initial_sidebar_state='auto',)
+# Only need to set these here as we are add controls outside of Hydralit, to customise a run Hydralit!
+st.set_page_config(page_title='Hoarelea Web Toolkit', page_icon="🧰",layout='wide',initial_sidebar_state='auto')
 
-if __name__ == '__main__':
+# Session Initialization
+if 'authentication_status' not in st.session_state:
+    st.session_state['authentication_status'] = None
 
-    #this is the host application, we add children to it and that's it!
-    over_theme = {'txc_inactive': '#FFFFFF',
-                #   'txc_active': '#31333F',
-                #   'option_active': '#F0F2F6',
-                  'menu_background': '#31333F'
-                  }
-    
-    app = HydraApp(title='Hoare Lea Web Toolbox',favicon="", 
-                   hide_streamlit_markers = True,
-                   use_navbar = True, 
-                   navbar_sticky = True, 
-                   navbar_animation= False,
-                   layout='wide', # centered or wide
-                   navbar_theme = over_theme,
-                   allow_url_nav = True
-                   )
-  
-    #Home button will be in the middle of the nav list now
-    app.add_app("Home", icon="🏠", app=apps.HomeApp(title='Home'),is_home=True)
-    app.add_app("Roadmap", icon="⚒️", app=apps.RoadmapApp(title='Roadmap'))
-    app.add_app("Interactive Dashboard", icon="💻", app=apps.DashBoardApp(title='Dashboard'))
-    
-    #specify a custom loading app for a custom transition between apps, this includes a nice custom spinner
-    #app.add_loader_app(apps.MyLoadingApp(delay=5))
-    # app.add_loader_app(apps.QuickLoaderApp())
-    
-    #run the whole lot
-    app.run()
+# If logged in -> Show all the tabs
+if st.session_state['authentication_status']:
+    # if st.session_state["role"] == "admin":
+    menu_data = [
+            {'icon': "", 'label': "Roadmap"},
+            {'icon': "", 'label': "Dashboard"},
+            {'icon': "", 'label': "Login"},
+        ]
+elif st.session_state['authentication_status'] == None:
+    menu_data = [
+            {'icon': "", 'label': "Login"},
+        ]
+
+# Overide the theme colors
+over_theme = {'txc_inactive': '#FFFFFF',
+            #   'txc_active': '#31333F',
+            #   'option_active': '#F0F2F6',
+                'menu_background': '#31333F'
+                }
+
+menu_id = hc.nav_bar(
+    menu_definition=menu_data,
+    home_name="Home",
+    override_theme=over_theme,
+    hide_streamlit_markers=False,  # will show the st hamburger as well as the navbar now!
+    sticky_nav=False,  # at the top or not
+    sticky_mode='Sticky',  # jumpy or not-jumpy, but sticky or pinned
+    use_animation= False,
+    )
+
+if menu_id == "Home":
+        apps.HomeApp()
+elif menu_id == "Roadmap":
+        apps.RoadmapApp()
+elif menu_id == "Dashboard":
+        apps.DashBoardApp()
+elif menu_id == "Login":
+        apps.LoginApp()
+                  

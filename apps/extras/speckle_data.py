@@ -71,13 +71,3 @@ def get_speckle_df(stream_id: str) -> pd.DataFrame:
     
     return df_branches
     # df_data # TODO 
-# %%   
-# df = get_speckle_df(stream_id='0b7b9e7705')
-# df
-# %%
-
-# %%
-
-# %%
-
-# %%
