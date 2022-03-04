@@ -32,11 +32,11 @@ def HomeApp():
         # # from url
         # st.markdown("![Alt Text](https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif)")
         
-        """### gif from local file"""
-        file_ = open("apps/data/dashboard.gif", "rb")
-        contents = file_.read()
-        data_url = base64.b64encode(contents).decode("utf-8")
-        file_.close()
+        # """### gif from local file"""
+        # file_ = open("apps/data/dashboard.gif", "rb")
+        # contents = file_.read()
+        # data_url = base64.b64encode(contents).decode("utf-8")
+        # file_.close()
 
         # # add gif of the platform
         # st.markdown(
