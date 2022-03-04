@@ -7,9 +7,6 @@ import os
 
 import streamlit.components.v1 as components
 
-# add an import to Hydralit
-from hydralit import HydraHeadApp
-
 from apps.extras.speckle_data import *
 from apps.extras.md_to_df import md2df
 # from helpers.speckle_data import get_speckle_df
@@ -47,17 +44,17 @@ def load_data(stream_id):
     return df
 
 # Descriptions dataframe
-# @st.cache()
+@st.cache(ttl=600)
 def load_descriptions() -> pd.DataFrame:
     return read_gsheets(SHEET_ID, 'Descriptions')
 
 # Remarks dataframe
-# @st.cache()
+@st.cache(ttl=600)
 def load_remarks() -> pd.DataFrame:
     return read_gsheets(SHEET_ID, 'CustomRemarks')
 
 # Remarks dataframe
-# @st.cache()
+@st.cache(ttl=600)
 def load_project_info() -> pd.DataFrame:
     return read_gsheets(SHEET_ID, 'ProjectInfo')
 
