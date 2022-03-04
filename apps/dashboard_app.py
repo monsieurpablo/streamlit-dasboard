@@ -8,7 +8,6 @@ import os
 import streamlit.components.v1 as components
 
 from apps.extras.speckle_data import *
-from apps.extras.md_to_df import md2df
 # from helpers.speckle_data import get_speckle_df
 
 # %%
