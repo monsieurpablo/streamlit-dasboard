@@ -17,11 +17,13 @@ def read_gsheets(sheet_id, sheet_name) -> pd.DataFrame:
     df = pd.read_csv(f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={sheet_name}")
     return df
 
-
 @st.cache(ttl=1200)
+def load_users():
+    return read_gsheets(SHEET_ID, 'Users')
+
 def LoginApp():
     # read database
-    df_users = read_gsheets(SHEET_ID, 'Users')
+    df_users = load_users()
     
     names = df_users.names.to_list()
     usernames = df_users.usernames.to_list()
