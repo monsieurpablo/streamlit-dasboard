@@ -17,9 +17,9 @@ def read_gsheets(sheet_id, sheet_name) -> pd.DataFrame:
     df = pd.read_csv(f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={sheet_name}")
     return df
 
+
+@st.cache(ttl=1200)
 def LoginApp():
-    
-    
     # read database
     df_users = read_gsheets(SHEET_ID, 'Users')
     
