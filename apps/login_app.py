@@ -7,7 +7,7 @@ import streamlit_authenticator as stauth
 from secrets import token_urlsafe
 
 
-os.environ["GSHEET_ID"] = "17oH61DLGHjllLqrNOX2Tx8oc69qyYCEHrlkMvnDL1Tg"
+# os.environ["GSHEET_ID"] = "17oH61DLGHjllLqrNOX2Tx8oc69qyYCEHrlkMvnDL1Tg"
 SHEET_ID = os.environ.get('GSHEET_ID')
 
 
@@ -52,11 +52,12 @@ def LoginApp():
     authenticator = stauth.authenticate(names, usernames, hashed_passwords,
                                     'hl-dashboard', token_urlsafe(16), cookie_expiry_days=30)
     
+    
     # set 2 columns
     space1, col,space2  = st.columns([1,3,1]) 
     
     with col:
-    # Create login form
+        # Create login form
         name, authentication_status = authenticator.login('Login', 'main')
         
         

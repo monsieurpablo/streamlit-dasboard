@@ -37,23 +37,23 @@ def convert_to_fstring(string:str):
         return compiled_fstring
 
 # Speckle data
-@st.cache(ttl=600)
+# @st.cache(ttl=600)
 def load_data(stream_id):
     df = get_speckle_df(stream_id=stream_id)
     return df
 
 # Descriptions dataframe
-@st.cache(ttl=600)
+# @st.cache(ttl=600, show_spinner=False)
 def load_descriptions() -> pd.DataFrame:
     return read_gsheets(SHEET_ID, 'Descriptions')
 
 # Remarks dataframe
-@st.cache(ttl=600)
+# @st.cache(ttl=600, show_spinner=False)
 def load_remarks() -> pd.DataFrame:
     return read_gsheets(SHEET_ID, 'CustomRemarks')
 
 # Remarks dataframe
-@st.cache(ttl=600)
+# @st.cache(ttl=600, show_spinner=False)
 def load_project_info() -> pd.DataFrame:
     return read_gsheets(SHEET_ID, 'ProjectInfo')
 
